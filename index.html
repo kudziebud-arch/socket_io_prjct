@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SocketIO Upvote</title>
+    <style>
+        .container {
+            width: 80%;
+            margin: 1rem auto;
+        }
+
+        .text-justify {
+            text-align: justify;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <p class="text-justify">
+            Lorem ipsum dolor sit amet...
+        </p>
+    </div>
+
+    <div class="container">
+        <center>
+            <button id="upvote-btn">
+                Upvote
+            </button>
+
+            <p id="upvote-count">0 Upvotes</p>
+        </center>
+    </div>
+
+    <!-- Socket.IO Client Library -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+        // Connect to the Socket.IO server
+        var socket = io();
+
+        // Get button element
+        var btn = document.getElementById("upvote-btn");
+
+        // Track whether the user has upvoted
+        var upvote_val = false;
+
+        // Listen for button click
+        btn.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Toggle upvote value
+            upvote_val = !upvote_val;
+
+            // Send upvote status to the server
+            socket.emit("upvote-event", upvote_val);
+        });
+
+        // Listen for updated upvote count from the server
+        socket.on("update-upvotes", function (f_str) {
+            document.getElementById("upvote-count").innerHTML = f_str;
+        });
+    </script>
+
+</body>
+</html>
